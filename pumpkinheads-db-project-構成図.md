@@ -43,22 +43,22 @@ HELLOWEENの名の下に、最強の布陣「United Forces」として集いし7
 1. **Michael Weikath** (Guitar / 結成メンバー)  
    - **理由**: 本DBの主権者であり、全てのメロディの起点（Root）であるため。 
 
-Markus Grosskopf (Bass / 結成メンバー)  
+2. **Markus Grosskopf** (Bass / 結成メンバー)  
    - **理由**: ヴァイキーと共に一度も脱退せず「城」を守り続けてきた、リズムの根幹（Infrastructure）であるため。 
 
-Andi Deris (Vocals / 1994年加入)  
+3. **Andi Deris** (Vocals / 1994年加入)  
    - **理由**: バンドの「声（Interface）」を再定義し、黄金期を支えるフロントマン。  
 
-Sascha Gerstner (Guitar / 2002年加入)  
+4. **Sascha Gerstner** (Guitar / 2002年加入)  
    - **理由**: 20年以上にわたり、ヴァイキーの対旋律（ハモり）を精密に構築してきた。  
 
-Daniel Löble (Drums / 2005年加入)  
+5. **Daniel Löble** (Drums / 2005年加入)  
    - **理由**: 鉄壁のリズムを支える、現代HELLOWEENの心臓部（Clock）。  
 
-Kai Hansen (Guitar & Vocals / 脱退後、2017年復帰)  
+6. **Kai Hansen** (Guitar & Vocals / 脱退後、2017年復帰)  
    - **理由**: オリジナルメンバーにして「守護神伝」の創造主にして、ジャーマンメタル界のゴッドファーザー。  
 
-Michael Kiske (Vocals / 脱退後、2017年復帰)   
+7. **Michael Kiske** (Vocals / 脱退後、2017年復帰)   
    - **理由**: リユニオン（再統合）の象徴。比類なきハイトーン。カイと共に「真の整合性」を取り戻した最後のピース。  
 
 ### 実際のクエリ（DDL）
