@@ -1,5 +1,6 @@
 # PumpkinheadsDB：テーブル構築図
 
+
 ## ■ Membersテーブルの作成  
 
 ### 【存在意義】（なぜ作ったのか？）  
@@ -33,6 +34,7 @@ CREATE TABLE members (
     is_active BOOLEAN DEFAULT TRUE     -- 在籍ステータス
 ); 
 ```
+
 
 ## ■ データ投入（INSERT）の記録：United Forces  
 
