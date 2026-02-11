@@ -48,7 +48,7 @@
 - -------------------------------------------------------------
 
 - **ping -c 10 8.8.8.8(WAN側GoogleDNS) を実行。**
- → 2度のパケロスを確認。パケロス無し。
+ → 2度のパケロスを確認。seq=8 にて大幅な遅延（time=485.743 ms）を確認。
 
 - kurokawa_takenori@kurokawatakenorinoiMac ~ % ping -c 10 8.8.8.8
 
@@ -69,6 +69,9 @@
 - round-trip min/avg/max/stddev = 10.126/71.642/485.743/156.525 ms
 
 - -------------------------------------------------------------
+
+- **traceroute to 8.8.8.8(WAN側GoogleDNS) を実行。**
+ → ３度のパケロスを確認。
 
 - kurokawa_takenori@kurokawatakenorinoiMac ~ % traceroute -d 8.8.8.8
 
