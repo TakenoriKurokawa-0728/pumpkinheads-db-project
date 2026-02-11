@@ -25,8 +25,8 @@
   
 2. **LOG**
 - **ping web.setup (LAN側デフォゲ：Aterm) を実行。**
-- → レスポンス：3.470ms 〜 3.798ms で安定。
-
+- → レスポンス：3.470ms 〜 3.798ms で安定。パケロス無し。
+-
 - kurokawa_takenori@kurokawatakenorinoiMac ~ % ping -c 10 web.setup
 
 - PING web.setup (192.168.0.1): 56 data bytes
