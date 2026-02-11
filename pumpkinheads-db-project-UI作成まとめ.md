@@ -25,7 +25,7 @@
   
 2. **LOG**
 - **ping -c 10 web.setup (LAN側デフォゲ：Aterm) を実行。**
-- → レスポンス：1.825ms 〜 3.798ms （ジッタが極小）で安定。パケロス無し。
+  - → レスポンス：1.825ms 〜 3.798ms （ジッタが極小）で安定。パケロス無し。
 
 - kurokawa_takenori@kurokawatakenorinoiMac ~ % ping -c 10 web.setup
 
@@ -48,7 +48,7 @@
 - -------------------------------------------------------------
 
 - **ping -c 10 8.8.8.8(WAN側GoogleDNS) を実行。**
- → 2度のパケロスを確認。seq=8 にて大幅な遅延（time=485.743 ms）を確認。
+  - → 2度のパケロスを確認。seq=8 にて大幅な遅延（time=485.743 ms）を確認。
 
 - kurokawa_takenori@kurokawatakenorinoiMac ~ % ping -c 10 8.8.8.8
 
@@ -71,7 +71,7 @@
 - -------------------------------------------------------------
 
 - **traceroute to 8.8.8.8(WAN側GoogleDNS) を実行。**
- → ３度のパケロスを確認。
+  - → ３度のパケロスを確認。
 
 - kurokawa_takenori@kurokawatakenorinoiMac ~ % traceroute -d 8.8.8.8
 
