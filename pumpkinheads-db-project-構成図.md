@@ -114,14 +114,23 @@ catalog_number: 日本の VICP-61169 も、ドイツの NB 543-2 も、それぞ
 ### 実際のクエリ（DDL）
 
 ```sql
+-- 1. 作品基本情報（論理レイヤー）
 CREATE TABLE albums (
-    album_id SERIAL PRIMARY KEY,         -- 守護神が振るアルバム管理番号
+    album_id SERIAL PRIMARY KEY,
     title_burrn VARCHAR(255) NOT NULL,    -- Burrn!誌での表記
-    release_date DATE NOT NULL,           -- 発売日（歴史的真実）
-    producer VARCHAR(100),                -- 音の建築士
-    label VARCHAR(100),                   -- 発売当時のレーベル
-    catalog_number VARCHAR(50),           -- 品番（再販・盤の区別用）
-    is_remastered BOOLEAN DEFAULT FALSE,  -- リマスター版か否か
-    edition_name VARCHAR(100)             -- 'Original', 'Deluxe Edition'等
+    original_release_year INTEGER          -- オリジナル発売年
+);
+
+-- 2. 世界各国の「盤」情報（物理レイヤー）
+CREATE TABLE album_editions (
+    edition_id SERIAL PRIMARY KEY,
+    album_id INTEGER REFERENCES albums(album_id), -- 作品IDで紐付け
+    country_code CHAR(2) NOT NULL,                -- 'JP', 'DE' 等
+    label VARCHAR(100),                           -- Victor, Nuclear Blast等
+    catalog_number VARCHAR(100),                  -- 各国の品番（精密なキー）
+    release_date DATE,                            -- 日本先行発売等の差異
+    is_remastered BOOLEAN DEFAULT FALSE,          -- リマスターフラグ
+    has_bonus_track BOOLEAN DEFAULT FALSE,        -- 日本盤特権の証明
+    edition_name VARCHAR(100)                     -- 'Limited Edition'等
 );
 ```
