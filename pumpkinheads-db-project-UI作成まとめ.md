@@ -24,7 +24,7 @@
    - → StreamlitによるブラウザUIの構築までを、一本のコード（プロトコル）でシームレスに繋げる。
   
 2.LOG
-**ping web.setup (LAN側デフォゲ：Aterm) を実行。**
+- **ping web.setup (LAN側デフォゲ：Aterm) を実行。**
 - → レスポンス：3.470ms 〜 3.798ms で安定。
 
 - kurokawa_takenori@kurokawatakenorinoiMac ~ % ping -c 10 web.setup
