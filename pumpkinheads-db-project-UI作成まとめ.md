@@ -48,7 +48,7 @@
 - -------------------------------------------------------------
 
 - **ping web.setup (LAN側デフォゲ：Aterm) を実行。**
-- → レスポンス：3.470ms 〜 3.798ms で安定。パケロス無し。
+ → レスポンス：3.470ms 〜 3.798ms で安定。パケロス無し。
 
 - kurokawa_takenori@kurokawatakenorinoiMac ~ % ping -c 10 8.8.8.8
 
@@ -67,4 +67,6 @@
 - --- 8.8.8.8 ping statistics ---
 - 10 packets transmitted, 8 packets received, 20.0% packet loss
 - round-trip min/avg/max/stddev = 10.126/71.642/485.743/156.525 ms
+
+  - -------------------------------------------------------------
 - kurokawa_takenori@kurokawatakenorinoiMac ~ % traceroute -d 8.8.8.8
