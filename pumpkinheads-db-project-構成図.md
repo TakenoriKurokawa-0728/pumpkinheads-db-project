@@ -8,7 +8,7 @@
 名前、パート、身体的スペック（身長・血液型）だけでなく、歴史（加入年）まで細分化し、  
 情報としてアナライジングした際の構造度を最大化させることを念頭に置いて作成。   
 
-### 【機密（ファイン）】なこだわり  
+### 【緻密（ファイン）】なこだわり  
 name_burrn: 日本のファンにとっての正解データである「Burrn!誌」の表記を基準（示名条片）とした。  
 ミドルネームの独立: Ingo Joachim を一括りにせず細分化し、将来の柔軟な検索（LIKE句）を可能にした。  
 身長の精度: DECIMAL(5,2) 型を採用し、数ミリ単位の真実（7）を記録可能とした。  
@@ -86,4 +86,34 @@ VALUES
 ('Daniel Löble', 'Daniel', '', 'Löble', 'Dani', 'Drums', '1973-02-22', 180.00, 'A', 2005, TRUE),
 ('Kai Hansen', 'Kai', 'Michael', 'Hansen', 'Kai', 'Guitar & Vocals', '1963-01-17', 175.00, 'A', 1984, TRUE),
 ('Michael Kiske', 'Michael', '', 'Kiske', 'Michi', 'Vocals', '1968-01-24', 182.00, 'O', 1986, TRUE);
+```
+
+
+## ■ Albumsテーブルの作成
+
+### 【存在意義】（なぜ作ったのか？）  
+メンバーが紡ぎ出した「作品（プロダクト）」を管理する、DB構造の第2階層。  
+単なるタイトル管理（10）に留まらず、発売日、プロデューサー、  
+さらには「盤（エディション）」ごとの差異をデータ化することで、  
+音楽史のバージョニング（版管理）を可能にするため。  
+
+### 【精密（ファイン）】なこだわり
+title_burrn: メンバー同様、日本のメタラーの聖典「Burrn!誌」の表記を正（真実：7）として採用。  
+release_date: 記念碑的な「発売日」は、年月日まで DATE型 で厳密に刻む。  
+is_remastered / catalog_number: 「同じ作品でも音が違う（リマスター）」や  
+「品番が違う（再販）」という不都合な真実を、フラグと品番で精密に識別。  
+
+### 実際のクエリ（DDL）
+
+```sql
+CREATE TABLE albums (
+    album_id SERIAL PRIMARY KEY,         -- 守護神が振るアルバム管理番号
+    title_burrn VARCHAR(255) NOT NULL,    -- Burrn!誌での表記
+    release_date DATE NOT NULL,           -- 発売日（歴史的真実）
+    producer VARCHAR(100),                -- 音の建築士
+    label VARCHAR(100),                   -- 発売当時のレーベル
+    catalog_number VARCHAR(50),           -- 品番（再販・盤の区別用）
+    is_remastered BOOLEAN DEFAULT FALSE,  -- リマスター版か否か
+    edition_name VARCHAR(100)             -- 'Original', 'Deluxe Edition'等
+);
 ```
