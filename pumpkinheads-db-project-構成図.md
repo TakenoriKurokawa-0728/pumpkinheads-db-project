@@ -79,7 +79,8 @@ HELLOWEENの名の下に、最強の布陣「United Forces」として集いし7
 
 ```sql
 INSERT INTO members (name_burrn, first_name, middle_name, last_name, nickname, instrument, birth_date, height_cm, blood_type, joined_year, is_active)
-VALUES 
+VALUES
+('Michael ``Weikath', 'Michael', 'Ingo ', 'Grosskopf', 'Markus', 'Bass', '1965-09-21', 190.00, 'O', 1984, TRUE),
 ('Markus Grosskopf', 'Markus', '', 'Grosskopf', 'Markus', 'Bass', '1965-09-21', 190.00, 'O', 1984, TRUE),
 ('Andi Deris', 'Andreas', '', 'Deris', 'Andi', 'Vocals', '1964-08-18', 178.00, 'B', 1994, TRUE),
 ('Sascha Gerstner', 'Sascha', '', 'Gerstner', 'Sascha', 'Guitar', '1977-04-02', 192.00, 'O', 2002, TRUE),
