@@ -80,10 +80,10 @@ HELLOWEENの名の下に、最強の布陣「United Forces」として集いし7
 ```sql
 INSERT INTO members (name_burrn, first_name, middle_name, last_name, nickname, instrument, birth_date, height_cm, blood_type, joined_year, is_active)
 VALUES
-('Michael ``Weikath', 'Michael', 'Ingo ', 'Grosskopf', 'Markus', 'Bass', '1965-09-21', 190.00, 'O', 1984, TRUE),
-('Markus Grosskopf', 'Markus', '', 'Grosskopf', 'Markus', 'Bass', '1965-09-21', 190.00, 'O', 1984, TRUE),
+('Michael Weikath', 'Michael', 'Ingo Joachim', 'Weikath', 'Weiki', 'Guitar', '1962-08-07', 190.00, 'O', 1984, TRUE),
+('Markus Grosskopf', 'Markus', '', 'Grosskopf', 'Markus', 'Bass', '1965-09-21', 192.00, 'O', 1984, TRUE),
 ('Andi Deris', 'Andreas', '', 'Deris', 'Andi', 'Vocals', '1964-08-18', 178.00, 'B', 1994, TRUE),
-('Sascha Gerstner', 'Sascha', '', 'Gerstner', 'Sascha', 'Guitar', '1977-04-02', 192.00, 'O', 2002, TRUE),
+('Sascha Gerstner', 'Sascha', '', 'Gerstner', 'Sascha', 'Guitar', '1977-04-02', 198.00, 'O', 2002, TRUE),
 ('Daniel Löble', 'Daniel', '', 'Löble', 'Dani', 'Drums', '1973-02-22', 180.00, 'A', 2005, TRUE),
 ('Kai Hansen', 'Kai', 'Michael', 'Hansen', 'Kai', 'Guitar & Vocals', '1963-01-17', 175.00, 'A', 1984, TRUE),
 ('Michael Kiske', 'Michael', '', 'Kiske', 'Michi', 'Vocals', '1968-01-24', 182.00, 'O', 1986, TRUE);
