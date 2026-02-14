@@ -16,6 +16,7 @@ name_burrn: 日本のファンにとっての正解データである「Burrn!�
 ### 実際のクエリ（DDL）
 
 ```sql
+
 CREATE TABLE members (
     member_id SERIAL PRIMARY KEY,      -- 守護神が振る唯一無二のID
     name_burrn VARCHAR(100),           -- Burrn!誌での表記
@@ -32,7 +33,8 @@ CREATE TABLE members (
     joined_year INTEGER,               -- 加入年
     left_year INTEGER,                 -- 脱退年
     is_active BOOLEAN DEFAULT TRUE     -- 在籍ステータス
-); 
+);
+
 ```
 
 
@@ -78,6 +80,7 @@ HELLOWEENの名の下に、最強の布陣「United Forces」として集いし7
 ### 実際のクエリ（DDL）
 
 ```sql
+
 INSERT INTO members (name_burrn, first_name, middle_name, last_name, nickname, instrument, birth_date, height_cm, blood_type, joined_year, is_active)
 VALUES
 ('Michael Weikath', 'Michael', 'Ingo Joachim', 'Weikath', 'Weiki', 'Guitar', '1962-08-07', 190.00, 'O', 1984, TRUE),
@@ -87,6 +90,7 @@ VALUES
 ('Daniel Löble', 'Daniel', '', 'Löble', 'Dani', 'Drums', '1973-02-22', 180.00, 'A', 2005, TRUE),
 ('Kai Hansen', 'Kai', 'Michael', 'Hansen', 'Kai', 'Guitar & Vocals', '1963-01-17', 175.00, 'A', 1984, TRUE),
 ('Michael Kiske', 'Michael', '', 'Kiske', 'Michi', 'Vocals', '1968-01-24', 182.00, 'O', 1986, TRUE);
+
 ```
 
 
@@ -119,6 +123,7 @@ burrn_reviews: 『Chameleon』のように評価が分かれる作品を考慮�
 ### 実際のクエリ（DDL）
 
 ```sql
+
 -- 1. 作品基本情報（論理レイヤー：普遍の真実）
 CREATE TABLE albums (
     album_id SERIAL PRIMARY KEY,
@@ -155,26 +160,29 @@ CREATE TABLE album_editions (
     has_bonus_track BOOLEAN DEFAULT FALSE,        -- 日本盤特権の証明
     edition_name VARCHAR(100)                     -- 'Limited Edition'等
 );
+
 ```
 
 
 ## ■ Live_Showsテーブルの作成  
 
-###【存在意義】（なぜ作ったのか？）
-バンドの活動実績（活動ログ）を管理する、DB構造の動的レイヤー。
-作品（Albums）が「完成したプログラム」なら、ライブは「実行ログ（Execution Log）」。
+###【存在意義】（なぜ作ったのか？）  
+バンドの活動実績（活動ログ）を管理する、DB構造の動的レイヤー。  
+作品（Albums）が「完成したプログラム」なら、ライブは「実行ログ（Execution Log）」。  
 ツアー名、開催地、そしてセットリストを紐付けることで、  
 どの楽曲が「ライブの定番（高可用性）」であるかをデータとして証明するため。  
 
-###【精密（ファイン）】なこだわり
-venue_name: 名古屋市民会館など、当時の現場（インフラ）の名称を正確に記録。
-play_order: カイ・ハンセン・メドレーのような、1枠の中に複数の曲がネスト（階層化）される複雑な構造を、  
+###【精密（ファイン）】なこだわり  
+venue_name: 名古屋市民会館など、当時の現場（インフラ）の名称を正確に記録。  
+play_order: カイ・ハンセン・メドレーのような、1枠の中に複数の曲がネスト（階層化）される複雑な構造を、   
+
 演奏順（Index）によって論理的に制御。  
 is_encore: 公演のクライマックス（アンコール）という特別なステータスをフラグ化。  
 
-### 実際のクエリ（DDL）
+### 実際のクエリ（DDL）  
 
 ```sql
+
 -- 1. ライブ公演基本情報（マスター：公演というイベントを特定）
 CREATE TABLE live_shows (
     show_id SERIAL PRIMARY KEY,
@@ -205,17 +213,49 @@ FROM tracks t
 JOIN setlists s ON t.track_id = s.track_id
 GROUP BY t.title
 ORDER BY frequency_rate DESC;
+
 ```
 
 
-## ■ m_helloween_tracksテーブルの作成
+## ■ m_helloween_tracksテーブルの作成  
 
-### 【存在意義】（なぜ作ったのか？）
-人生のサウンドトラックを司る、DB構造の「マスター・カーネル（核）」。
-音楽を単なる「趣味（3）」という名のノイズで終わらせず、「 物理層（品番・秒数） 」「 論理層（整合性） 」「 感情層（Lyric） 」を完全に正規化。
-12連敗という名のエラーログを焼き尽くし、17日のオープンソフト（SSS）戦という名の「本番環境デプロイ」において、自らの精密さをエビデンス（証拠）として提示するため。
+### 【存在意義】（なぜ作ったのか？）  
+人生のサウンドトラックを司る、DB構造の「マスター・カーネル（核）」。  
+音楽を単なる「趣味（3）」という名のノイズで終わらせず、  
+「 物理層（品番・秒数） 」「 論理層（整合性） 」「 感情層（Lyric） 」を完全に正規化。  
 
-### 【精密（ファイン）】なこだわり
-duration（13:37）: QobuzやVictorの現物（VICP品番）により証明された「1秒の狂いもない再生時間」。世間の13:38という曖昧なパケット（3）を拒絶する、データの整合性（Integrity）への執念。
-lyric_anchor_url: Dark Lyricsの「#2（イーグル）」のように、アルバム全曲という巨大なデータセットから、1.8msで特定の楽曲ポインタ（魂）を射抜くための神速ルーティング。
-sampling_rate: 24-Bit / 96.0 kHz というハイレゾ仕様。自身のエンジニアとしての「知覚の解像度（QoS）」を物理的に定義。
+### 【精密（ファイン）】なこだわり  
+duration（13:37）: QobuzやVictorの現物（VICP品番）により証明された「1秒の狂いもない再生時間」。  
+世間の13:38という曖昧なパケット（3）を拒絶する、データの整合性（Integrity）への執念。  
+lyric_anchor_url: Dark Lyricsの「#2（イーグル）」のように、  
+アルバム全曲という巨大なデータセットから、1.8msで特定の楽曲ポインタ（魂）を射抜くための神速ルーティング。  
+
+sampling_rate: 24-Bit / 96.0 kHz というハイレゾ仕様。自身のエンジニアとしての「知覚の解像度（QoS）」を物理的に定義。  
+
+### 実際のクエリ（DDL）  
+
+```sql
+
+/* 
+ * [m_helloween_tracks] 
+ * 1ビットの不整合も許さない、精密（ファイン）な人生のマスタ
+ */
+CREATE TABLE m_helloween_tracks (
+    track_id SERIAL PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,            -- 魂のタイトル（Eagle Fly Free等）
+    album_name VARCHAR(100),                -- 所属アルバム
+    catalog_no VARCHAR(50),                 -- Victor現物品番（VICP-XXXX：真実の鍵）
+    duration INTERVAL NOT NULL,               -- 13:37の執念（精密な物理再生時間）
+    sampling_rate VARCHAR(30),              -- 解像度（24-Bit/96kHz：エンジニアの視界）
+    energy_level INT CHECK (energy_level BETWEEN 1 AND 10), -- 執念のボルテージ
+    lyric_anchor_url VARCHAR(255),           -- Dark Lyricsの#アンカー（ピンポイント接続）
+    youtube_url VARCHAR(255),                -- 外部ストリーミングへの動的リンク
+    verification_source VARCHAR(100),       -- 'Victor & Qobuz' (真実の出所)
+    shangri_la_sync_rate DECIMAL(5,2) DEFAULT 100.00 -- 理想郷との同期率
+);
+
+-- 1.8msで魂をSELECTするための索引（加速装置）
+CREATE INDEX idx_track_energy ON m_helloween_tracks (energy_level DESC);
+CREATE INDEX idx_track_title ON m_helloween_tracks (title);
+
+```
