@@ -1,34 +1,19 @@
--- 1.8msで「魂のパケット」を抽出するクエリ
-SELECT 
-    title, 
-    duration, 
-    catalog_no, 
-    verification_source 
-FROM m_helloween_tracks 
-WHERE energy_level = 10
--- 武範さんの手元にある「真の品番」と「Qobuzの解像度」を精密にマウント
-INSERT INTO m_helloween_tracks 
-(title, album_name, catalog_no, duration, sampling_rate, energy_level, bpm, lyric_anchor_url, youtube_url, verification_source) 
-VALUES
-('Eagle Fly Free', 'Keeper II', 'VICP-XXXX', '00:05:08', '96kHz/24bit', 10, 190, 
- 'http://www.darklyrics.com', 
- 'https://www.youtube.com', 'Victor & Qobuz'),
-('Keeper of the Seven Keys', 'Keeper II', 'VICP-XXXX', '00:13:37', '96kHz/24bit', 10, 140, 
- 'http://www.darklyrics.com', 
- 'https://www.youtube.com', 'Victor & Qobuz (Hi-Res)')
-CREATE INDEX idx_track_title ON m_helloween_tracks (title)
--- 1. DEFAULT句をパージし、厳格な設計へリビルド（修正）
-CREATE TABLE m_helloween_tracks (
-    track_id SERIAL PRIMARY KEY,
-    title VARCHAR(100) NOT NULL,
-    album_name VARCHAR(100),
-    catalog_no VARCHAR(50),      -- DEFAULTを削除（現物を確認して入力せよ！）
-    duration INTERVAL NOT NULL,
-    sampling_rate VARCHAR(20),   -- DEFAULTを削除（ソースごとに異なるため）
-    energy_level INT CHECK (energy_level BETWEEN 1 AND 10),
-    bpm INT,
-    lyric_anchor_url VARCHAR(255),
-    youtube_url VARCHAR(255),
-    verification_source VARCHAR(100), -- 'Qobuz' や 'Physical CD' 等
-    shangri_la_sync_rate DECIMAL(5,2) DEFAULT 100.00 -- これだけは100%であれ
-)
+# 🎸 Life-Synchronization Database Project: Helloween Master
+### 1.8ms Precision Data Engineering by Takenori Kurokawa
+
+## 🎯 Project Overview
+このプロジェクトは、単なる楽曲管理ではありません。
+「1ビットの不整合（3）も許さない」データエンジニアとしての執念を、
+物理層（CD品番・13:37の再生時間）からアプリ層（歌詞・動画連携）まで
+完全に正規化・構造化した、高可用性（HA）な人生のマスタデータ構築実証です。
+
+## 🛠 Tech Stack
+- **Hardware**: iMac M3 (Apple Silicon)
+- **Database**: PostgreSQL 16 (on Docker)
+- **Tool**: DBeaver, Python 3.14 (Latest Dev)
+- **Source**: Victor Musical Industries (Physical CD), Qobuz (Hi-Res Audio)
+
+## 💎 Core Logic: 10 - 3 = 7
+「10 (実務20年の重み)」 - 「3 (不採用という名のノイズ)」 = 「7 (真実のSuccess)」
+本DBは、13分38秒という曖昧な世界標準（3）を拒絶し、
+現物CDとハイレゾサイトのクロスチェックにより導き出した「13:37」を真実（7）として定義しています。
