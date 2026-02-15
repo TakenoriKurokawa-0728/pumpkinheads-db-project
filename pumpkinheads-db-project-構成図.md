@@ -45,7 +45,10 @@ HELLOWEENの名の下に、最強の布陣「United Forces」として集いし7
 歴史的背景に基づいたシーケンスでスタジオイン（INSERT）させる。  
 
 1. **Michael Weikath** (Guitar / 結成メンバー)  
-   - **理由**: 本DBの最重要人物であり、バンドの核そのもの。 
+   - **理由**: 本DBの最重要人物であり、バンドの核そのもの。
+  
+1. **Michael Weikath** (Guitar / 結成メンバー)  
+   - 本DBの最重要人物であり、バンドの核そのもの。
 
 2. **Markus Grosskopf** (Bass / 結成メンバー)  
    - **理由**: ヴァイキーと共に一度も脱退していないSole Survivor。 
