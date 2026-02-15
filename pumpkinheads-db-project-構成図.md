@@ -346,17 +346,17 @@ import requests  # 外部へパケットを投げるライブラリ
 import psycopg2  # iMac M3 内の PostgreSQL とハンドシェイク(Sync)用
 
 def fetch_and_update_sales():
-    # 1. DBへのコネクション確立 (1.8ms)
+    # 1. DBへのコネクション確立
     conn = psycopg2.connect("dbname=helloween user=takenori")
     cur = conn.cursor()
 
-    # 2. 全17枚のアルバムタイトルという名の「 器(latest_sales) 」をSELECT
+    # 2. 今現在17枚のアルバムタイトルという名の「 器(latest_sales) 」をSELECT
     cur.execute("SELECT album_id, title FROM m_albums")
     albums = cur.fetchall()
 
     for album_id, title in albums:
-        # 3. 外部API(Discogs等)へ「売上/統計を教えろ」と1.8msのリクエスト
-        # ※本来はAPIキーが必要ですが、ロジックの「真実(7)」を記述
+        # 3. 外部API(Discogs等)へ「売上/統計を教えろ」とリクエスト
+        # ※本来はAPIキーが必要ですが、ロジックを記述
         api_url = f"https://api.discogs.com{title}&artist=Helloween"
         
         try:
