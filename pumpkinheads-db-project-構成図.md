@@ -338,7 +338,7 @@ WHERE title = 'Keeper of the Seven Keys' AND album_id = 3;
 ```
 
 ### UIで累計売上枚数を獲得するコード（後日実装予定）
-### 実際のソースコード  
+### 実際のソースコード(album_sales_fetcher.py)  
 
 ```Python
 
