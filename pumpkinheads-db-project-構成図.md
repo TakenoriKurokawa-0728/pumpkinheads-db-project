@@ -318,5 +318,21 @@ VALUES (3, 'Keeper of the Seven Keys Part II', 1988, 'VICP-XXXX', 1.00, 5);
 INSERT INTO m_tracks (album_id, track_no, title, duration, energy_level)
 VALUES (3, 9, 'Keeper of the Seven Keys', '00:13:37', 10);
 
+/* 
+ * [m_tracks: Multimedia Integration] 
+ * 歌詞(Dark Lyrics)と動画(YouTube)カラムを追加
+ */
+
+-- 1. Eagle Fly Free (Keeper 2 / Track 2) 
+UPDATE m_tracks 
+SET lyric_anchor_url = 'http://www.darklyrics.com',
+    youtube_url = 'https://www.youtube.com'
+WHERE title = 'Eagle Fly Free' AND album_id = 3;
+
+-- 2. Keeper of the Seven Keys (Keeper 2 / Track 9) 
+UPDATE m_tracks 
+SET lyric_anchor_url = 'http://www.darklyrics.com',
+    youtube_url = 'https://www.youtube.com'
+WHERE title = 'Keeper of the Seven Keys' AND album_id = 3;
 
 ```
