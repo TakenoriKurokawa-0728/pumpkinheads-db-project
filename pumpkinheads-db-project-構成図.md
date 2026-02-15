@@ -41,14 +41,10 @@ CREATE TABLE members (
 ## ■ データ投入（INSERT）の記録：United Forces  
 
 ### 【インサートのシーケンス（投入順序）とその意義】  
-HELLOWEENの名の下に、最強の布陣「United Forces」として集いし7名の守護神を  
-歴史的背景に基づいたシーケンスでスタジオイン（INSERT）させる。  
+HELLOWEENの名の下に、最強の布陣「United Forces」として集いし7名の守護神を歴史的背景に基づいたシーケンスでスタジオイン（INSERT）させる。  
 
 1. **Michael Weikath** (Guitar / 結成メンバー)  
    - **理由**: 本DBの最重要人物であり、バンドの核そのもの。
-  
-1. **Michael Weikath** (Guitar / 結成メンバー)  
-   - 本DBの最重要人物であり、バンドの核そのもの。
 
 2. **Markus Grosskopf** (Bass / 結成メンバー)  
    - **理由**: ヴァイキーと共に一度も脱退していないSole Survivor。 
