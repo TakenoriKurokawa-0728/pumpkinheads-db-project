@@ -190,7 +190,7 @@ CREATE TABLE live_shows (
     show_date DATE NOT NULL,              -- 開催日（歴史的真実）
     country_code CHAR(2) DEFAULT 'JP',    -- 開催国（ISO 3166-1準拠）
     city_name VARCHAR(100),               -- 都市名
-    venue_name VARCHAR(200)               -- 会場名（例：名古屋市民会館）
+    venue_name VARCHAR(200)               -- 会場名（例：日本武道館）
 );
 
 -- 2. セットリスト（中間テーブル：どの曲を何番目に演奏したか）
@@ -294,11 +294,11 @@ DROP TABLE IF EXISTS m_helloween_tracks CASCADE;
 
 -- 2. 物理マスタ：アルバム（親）の構築
 CREATE TABLE m_albums (
-    album_id INT PRIMARY KEY,               -- 3枚目=ID:3 という執念の物理インデックス
+    album_id INT PRIMARY KEY,               -- 3枚目=ID:3 物理インデックス
     title VARCHAR(100) NOT NULL,
     release_year INT NOT NULL,
     catalog_no VARCHAR(50),                 -- 現物CD(VICP)の証跡
-    total_sales_millions DECIMAL(5,2),     -- ヴァイキーの有能さ（売上枚数）
+    total_sales_millions DECIMAL(5,2),     -- 売上枚数
     chart_peak_germany INT,                 -- 市場への浸透率
     verification_source VARCHAR(100) DEFAULT 'Recording Industry Association'
 );
@@ -306,7 +306,7 @@ CREATE TABLE m_albums (
 -- 3. 論理マスタ：楽曲（子）の構築（FK結合）
 CREATE TABLE m_tracks (
     track_id SERIAL PRIMARY KEY,
-    album_id INT REFERENCES m_albums(album_id), -- 1.8ms の親子結合
+    album_id INT REFERENCES m_albums(album_id), -- 親子結合
     track_no INT,                               -- 魂の並び順（9曲目の真実）
     title VARCHAR(100) NOT NULL,
     duration INTERVAL NOT NULL,                 -- 00:13:37 の整合性
