@@ -17,23 +17,28 @@ name_burrn: 日本のファンにとっての正解データである「Burrn!�
 
 ```sql
 
-CREATE TABLE members (
-    member_id SERIAL PRIMARY KEY,      -- 守護神が振る唯一無二のID
-    name_burrn VARCHAR(100),           -- Burrn!誌での表記
-    first_name VARCHAR(100) NOT NULL,  -- 名
-    middle_name VARCHAR(100),          -- ミドルネーム
-    last_name VARCHAR(100) NOT NULL,   -- 姓
-    nickname VARCHAR(50),              -- 愛称
-    instrument VARCHAR(50),            -- 担当楽器
-    birth_date DATE,                   -- 生年月日
-    height_cm DECIMAL(5,2),            -- 身長（精密な数値型）
-    blood_type VARCHAR(5),             -- 血液型
-    birth_place VARCHAR(100),          -- 出身地
-    nationality VARCHAR(50),           -- 国籍
-    joined_year INTEGER,               -- 加入年
-    left_year INTEGER,                 -- 脱退年
-    is_active BOOLEAN DEFAULT TRUE     -- 在籍ステータス
+CREATE TABLE m_members (
+    member_id SERIAL PRIMARY KEY,      -- 守護神を 特定する PK
+    name_burrn VARCHAR(100),           -- Burrn! 誌の正義
+    first_name VARCHAR(100) NOT NULL,
+    middle_name VARCHAR(100),
+    last_name VARCHAR(100) NOT NULL,
+    nickname VARCHAR(50),
+    instrument VARCHAR(50),            -- 担当楽器（Vocal, Guitar, etc.）
+    birth_date DATE,
+    height_cm DECIMAL(5,2),
+    blood_type VARCHAR(5),
+    birth_place VARCHAR(100),
+    nationality VARCHAR(50),
+    joined_year INTEGER,
+    left_year INTEGER,
+    is_active BOOLEAN DEFAULT TRUE,    -- 在籍ステータス（現役か否か：7）
+    -- 【重要】SNSアカウント：外部世界（Truth）への神速ルーティング
+    sns_account VARCHAR(255)           
 );
+
+-- 特定のメンバーを SELECT するための索引
+CREATE INDEX idx_member_name ON m_members (name_burrn);
 
 ```
 
