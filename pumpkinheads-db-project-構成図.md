@@ -412,7 +412,7 @@ if __name__ == "__main__":
  * 1ビットの不整合も許さない、精密（ファイン）な情報の解体と再構築
  */
 
--- 1. 媒体マスタ：Burrn! や Bass Magazine の器
+-- 1. 媒体マスタ：Burrn!  Young Guitar　Bass Magazine の器
 CREATE TABLE m_magazines (
     magazine_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,            -- 雑誌名
