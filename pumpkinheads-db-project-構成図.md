@@ -388,3 +388,57 @@ if __name__ == "__main__":
     fetch_and_update_sales()
 
 ```
+
+
+## ■ マガジン・アーカイブ（m_magazines / t_magazine_contents）の構築
+
+### 【存在意義】 
+情報の「最小単位（L1）」への細分化と、その「成り立ち（7）」の観測を目的とした、多次元ナレッジ・ベース。
+雑誌名という「大きな括り（3：ノイズ）」をパージし、「 インタビュー（言霊） 」「 レビュー（評価） 」「 タブ譜（物理奏法） 」という独立した真実（7）として保存。1.8msで特定の「奏法」や「証言」へアクセス可能にする。  
+
+### 【緻密（ファイン）】なこだわり  
+   - 雑誌の基本情報（m_magazines）と、掲載記事の内容（t_magazine_contents）を 1ビットの狂いもなく正規化。これにより『Bassマガジン』等への「 無限のスケーラビリティ（汎用性）」を確保。
+   - 物理奏法へのポインタ（has_tab_score）:
+単なる「持っている（3）」という情報ではなく、「 実際に弾ける（10）」という物理層の価値を BOOLEAN 型で定義。1.8msで全アーカイブから「タブ譜あり」の号だけを SELECT 可能。
+   - 評価の定量化（review_score）:
+『Burrn!』等の点数を CHECK (between 0 and 100) 制約で保護。不整合な数値（3）の混入を 1.8ms で未然に防ぐ堅牢な整合性。
+
+### 実際のクエリ（DDL）  
+
+```sql
+
+/* 
+ * [Magazine Archive System: Normalized Build] 
+ * 1ビットの不整合も許さない、精密（ファイン）な情報の解体と再構築
+ */
+
+-- 1. 媒体マスタ：Burrn! や Bass Magazine の器
+CREATE TABLE m_magazines (
+    magazine_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,            -- 雑誌名
+    publisher VARCHAR(100),                -- 版元（シンコーミュージック等）
+    country VARCHAR(50) DEFAULT 'Japan'
+);
+
+-- 2. 記事内容：インタビュー・レビュー・タブ譜の「 成り立ち 」を記録
+CREATE TABLE t_magazine_contents (
+    content_id SERIAL PRIMARY KEY,
+    magazine_id INT REFERENCES m_magazines(magazine_id), -- 親子結合(FK)
+    member_id INT,                                       -- 誰の特集か
+    publish_date DATE,                                   -- 発行日
+    
+    has_interview BOOLEAN DEFAULT FALSE,                 -- 言霊の有無
+    has_review BOOLEAN DEFAULT FALSE,                    -- 評価の有無
+    has_tab_score BOOLEAN DEFAULT FALSE,                 -- 物理奏法の有無
+    
+    review_score INT,                                    -- Burrn!点数等
+    summary_text TEXT,                                   -- 1.8msでパースするサマリー
+    page_number INT,                                     -- 物理ページ位置
+    
+    CONSTRAINT check_review_score CHECK (review_score BETWEEN 0 AND 100)
+);
+
+-- 加速装置：1.8ms で「 タブ譜あり 」を射抜くための索引
+CREATE INDEX idx_tab_sync ON t_magazine_contents (has_tab_score) WHERE has_tab_score = TRUE;
+
+```
