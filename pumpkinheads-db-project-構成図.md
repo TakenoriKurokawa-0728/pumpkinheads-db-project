@@ -442,3 +442,45 @@ CREATE TABLE t_magazine_contents (
 CREATE INDEX idx_tab_sync ON t_magazine_contents (has_tab_score) WHERE has_tab_score = TRUE;
 
 ```
+
+
+## ■ データベース自律型・整合性維持システム（Trigger Implementation）
+本プロジェクトでは、データの守りの設計として、PostgreSQLのTrigger（トリガー）機能をマウント（実装）。
+
+### 1. 物理層での自動同期（Automated Sync）
+   - 仕様 : m_tracks（楽曲マスタ）に対して INSERT / UPDATE / DELETE が実行された瞬間にトリガーが発動。
+   - ロジック : 関数 update_album_total_duration() を呼び出し、該当するアルバムの total_duration（INTERVAL型）を再計算・自動更新（UPDATE）。
+### 2. インフラエンジニア視点でのメリット
+   - 人的エラーの排除 : アプリケーション（UI）側での更新漏れというバグ（3）を物理的に排除し、DB側で強制的にデータの整合性を担保する。
+   - 迅速なレスポンス : 外部プログラム（Python等）を介さずDB内部で処理を完結させることで、スループットの高速化を実現する。
+
+
+### 実際のクエリ（DDL）  
+
+```sql
+
+-- 1. アルバムテーブルに総時間カラムを追加
+ALTER TABLE albums ADD COLUMN total_duration INTERVAL;
+
+-- 2. カラムに説明（コメント）をマウント
+COMMENT ON COLUMN albums.total_duration IS 'アルバムに含まれる全楽曲の合計演奏時間（INTERVAL型）';
+
+「 全自動・総時間同期トリガー 」
+① まずは「 計算して上書きする 」（関数）を作成
+CREATE OR REPLACE FUNCTION update_album_total_duration()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- m_tracks の変更を検知して m_albums の total_duration を更新
+    UPDATE m_albums
+    SET total_duration = (SELECT SUM(duration) FROM m_tracks WHERE album_id = COALESCE(NEW.album_id, OLD.album_id))
+    WHERE id = COALESCE(NEW.album_id, OLD.album_id);
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+② 次に「 動きを監視する引き金 」（トリガー）を設置
+CREATE TRIGGER trg_update_album_duration
+AFTER INSERT OR UPDATE OR DELETE ON m_tracks
+FOR EACH ROW EXECUTE FUNCTION update_album_total_duration();
+
+```
