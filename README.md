@@ -10,7 +10,7 @@
 ## 🛠 Tech Stack
 - **Hardware**: iMac M3 (Apple Silicon)
 - **Database**: PostgreSQL 16 (on Docker)
-- **Tool**: DBeaver, Python 3.14 (Latest Dev)
+- **Tool**: DBeaver, Python 3.14 (Latest Dev), Homebrew
 - **Source**: Victor Musical Industries (Physical CD), Qobuz (Hi-Res Audio)
 
 ## 💎 Core Logic: 10 - 3 = 7
