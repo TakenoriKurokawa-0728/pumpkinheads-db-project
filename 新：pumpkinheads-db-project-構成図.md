@@ -13,11 +13,11 @@
 - **Data Lineage**: 著作権DB（Musixmatch）等、情報の出自をメタデータ（COMMENT）として1ビットの狂いもなく記録。
 
 ### 📊 Entity Relationship Diagram
-`m_albums` (The Master Hub)
-  ├── `m_tracks` (Child: Track-list Sync)
-  ├── `burrn_reviews` (Child: Reviewer Data)
-  ├── `burrn_appearance` (Child: Issue Logs)
-  └── `album_editions` (Child: Global Release Data)
+`m_albums` (The Master Hub)  
+  ├── `m_tracks` (Child: Track-list Sync)  
+  ├── `burrn_reviews` (Child: Reviewer Data)  
+  ├── `burrn_appearance` (Child: Issue Logs)  
+  └── `album_editions` (Child: Global Release Data)  
 
 ## 🚀 Future Vision
 iMac M3 × Docker 環境での爆速運用をベースに、世界中のパンプキン・ヘッズと同期（Sync）する、世界最高精度の鋼鉄のインフラを目指します。
