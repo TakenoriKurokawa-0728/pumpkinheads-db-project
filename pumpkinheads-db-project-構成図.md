@@ -1,4 +1,4 @@
-# PumpkinheadsDB：テーブル構築図
+# 旧：PumpkinheadsDB：テーブル構築図（v1.0）
 
 
 ## ■ Membersテーブルの作成  
