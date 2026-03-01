@@ -77,7 +77,7 @@ CREATE TABLE public.m_members (
     updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 出典（Source）を1.8msでインジェクション（注入）
+-- 出典（Source）をインジェクション（注入）
 COMMENT ON COLUMN public.m_members.middle_name IS 'Source: Verified via Musixmatch (Writer ID) - Pending official confirmation';
 
 -- 高速検索のための索引（Index）をマウント
@@ -95,7 +95,7 @@ CREATE TABLE public.m_albums (
     verification_source   TEXT                   -- 1.8msで特定（10）
 );
 
--- 楽曲データを新マスタに 1.8ms でマウント（再定義）
+-- 楽曲データを新マスタにマウント（再定義）
 CREATE TABLE public.m_tracks (
     track_id          SERIAL PRIMARY KEY,
     album_id          INTEGER REFERENCES public.m_albums(album_id) ON DELETE CASCADE,
@@ -106,5 +106,9 @@ CREATE TABLE public.m_tracks (
     youtube_url       TEXT,
     track_no          INTEGER
 );
+
+-- 作詞者と作曲者の列を物理的にインジェクション（注入）
+ALTER TABLE public.m_tracks ADD COLUMN lyricist VARCHAR(100);
+ALTER TABLE public.m_tracks ADD COLUMN composer VARCHAR(100);
 
 ```
