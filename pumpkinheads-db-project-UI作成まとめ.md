@@ -81,3 +81,62 @@
 - 6  ***.***.***.*** (***.***.***.***)   12.145 ms
 -    ***.***.***.*** (***.***.***.***)   11.511 ms *
 - 7  dns.google (8.8.8.8)  14.719 ms  15.311 ms *
+
+- -------------------------------------------------------------
+
+### 実際のクエリ（DDL）
+
+```python
+
+import streamlit as st
+import pandas as pd
+import psycopg2
+
+# 1. 物理接続の設定（PostgreSQL 16 / Docker）
+def get_connection():
+    return psycopg2.connect(
+        host="localhost",
+        database="your_db_name", # 物理DB名をインジェクション
+        user="your_user",
+        password="your_password",
+        port="5432"
+    )
+
+# 2. UI基本構造のマウント
+st.set_page_config(page_title="PumpkinHeadsDB - Live Energy", layout="wide")
+st.title("🎸 PumpkinHeadsDB: 1.8ms Precision UI")
+st.write("--- 10 - 3 = 7: 真実のSuccessを可視化する ---")
+
+# 3. 定番曲度（Frequency Rate）のパース（抽出）
+st.subheader("📊 Track Frequency Rate (定番曲度の特定)")
+
+try:
+    conn = get_connection()
+    # 先ほど作成したView (v_track_frequency) を叩く
+    query = "SELECT * FROM v_track_frequency ORDER BY frequency_rate DESC"
+    df = pd.read_sql(query, conn)
+    
+    # Streamlitによる高密度な可視化
+    st.dataframe(
+        df.style.highlight_max(axis=0, subset=['frequency_rate'], color='#ff4b4b'),
+        use_container_width=True
+    )
+
+    # 4. インタラクティブな操作（スライダーによるフィルタリング）
+    threshold = st.slider("定番曲度の閾値を設定 (Physical Filter)", 0, 100, 50)
+    filtered_df = df[df['frequency_rate'] >= threshold]
+    st.write(f"閾値 {threshold}% 以上の真実データ: {len(filtered_df)} 件")
+    st.table(filtered_df[['track_title', 'album_title', 'frequency_rate']])
+
+except Exception as e:
+    st.error(f"不整合(3)が発生しました: {e}")
+finally:
+    if 'conn' in locals(): conn.close()
+
+# 5. サイドバーに「20年の重み」をインジェクション
+st.sidebar.info("Engineering by Takenori Kurokawa")
+st.sidebar.text("Hardware: iMac M3")
+st.sidebar.text("Source: Victor / Qobuz")
+
+```
+
