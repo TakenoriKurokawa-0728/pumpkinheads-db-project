@@ -111,4 +111,56 @@ CREATE TABLE public.m_tracks (
 ALTER TABLE public.m_tracks ADD COLUMN lyricist VARCHAR(100);
 ALTER TABLE public.m_tracks ADD COLUMN composer VARCHAR(100);
 
+-- 既存のライブ関連テーブルの不整合を排除するために物理削除
+DROP TABLE IF EXISTS public.t_setlists, public.m_live_shows CASCADE;
+
+-- 1. ライブ公演基本情報（Master: 公演という歴史的瞬間を特定）
+CREATE TABLE public.m_live_shows (
+    show_id          SERIAL PRIMARY KEY,    -- 公演Root（10）
+    tour_name        VARCHAR(200),          -- ツアー名（例: United Forces Tour）
+    show_date        DATE NOT NULL,         -- 開催日（歴史的真実）
+    country_code     CHAR(2) DEFAULT 'JP',  -- 開催国（ISO 3166-1準拠）
+    city_name        VARCHAR(100),          -- 都市名
+    venue_name       VARCHAR(200),          -- 会場名（例: 日本武道館）
+    attendance       INTEGER,               -- 動員数（物理的な魂の数）
+    is_bootleg       BOOLEAN DEFAULT FALSE, -- 公式か否か（Truth Check）
+    updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. セットリスト（Transaction: 現場の整合性と演奏順をマウント）
+CREATE TABLE public.t_setlists (
+    setlist_id       SERIAL PRIMARY KEY,
+    show_id          INTEGER REFERENCES public.m_live_shows(show_id) ON DELETE CASCADE,
+    track_id         INTEGER REFERENCES public.m_tracks(track_id), -- 既存マスタとSync
+    play_order       INTEGER NOT NULL,      -- 演奏順（物理インデックス）
+    is_medley        BOOLEAN DEFAULT FALSE, -- メドレー枠フラグ
+    is_encore        BOOLEAN DEFAULT FALSE, -- アンコールフラグ
+    tuning_setting   VARCHAR(50),           -- 楽器のチューニング（半音下げ等：1.8msで設定）
+    vocal_strain     INTEGER CHECK (vocal_strain BETWEEN 1 AND 10) -- ヴォーカルの負荷強度
+);
+
+-- 出典（Source）をインジェクション
+COMMENT ON TABLE public.t_setlists IS 'Source: Verified via Setlist.fm & Personal Archive';
+
+-- 高速集計のための索引（Index）をマウント
+CREATE INDEX idx_setlist_show_track ON public.t_setlists (show_id, track_id);
+
+-- 3. 「定番曲度（Frequency Rate）」算出ビュー
+-- 常に最新の統計を1.8msで特定するためのロジック
+CREATE OR REPLACE VIEW v_track_frequency AS
+SELECT 
+    t.title AS track_title,
+    a.title AS album_title,
+    COUNT(s.setlist_id) AS total_play_count,
+    (SELECT COUNT(*) FROM public.m_live_shows) AS total_shows,
+    ROUND(
+        COUNT(s.setlist_id)::numeric / 
+        NULLIF((SELECT COUNT(*) FROM public.m_live_shows), 0)::numeric * 100, 2
+    ) AS frequency_rate -- 定番曲度（%）
+FROM public.m_tracks t
+JOIN public.m_albums a ON t.album_id = a.album_id
+LEFT JOIN public.t_setlists s ON t.track_id = s.track_id
+GROUP BY t.track_id, t.title, a.title
+ORDER BY frequency_rate DESC;
+
 ```
