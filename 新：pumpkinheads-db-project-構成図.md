@@ -114,6 +114,12 @@ ALTER TABLE public.m_tracks ADD COLUMN composer VARCHAR(100);
 -- 既存のライブ関連テーブルの不整合を排除するために物理削除
 DROP TABLE IF EXISTS public.t_setlists, public.m_live_shows CASCADE;
 
+
+▫️業界5年PGの視点
+Viewの活用： v_track_frequency として定義することで、アプリケーション側から「定番曲度」をいつでも1クエリで叩き出せるようにしました。
+外部キー制約（References）： m_tracks と m_albums に紐付けたことで、アルバムごとの「ライブ貢献度」も可視化できる拡張性を持たせています。
+NULLIFによる防衛： 万が一 m_live_shows が 0 件でも、ゼロ除算エラー（Division by zero）でシステムを落とさない実務的な堅牢性を注入しました。
+
 -- 1. ライブ公演基本情報（Master: 公演という歴史的瞬間を特定）
 CREATE TABLE public.m_live_shows (
     show_id          SERIAL PRIMARY KEY,    -- 公演Root（10）
