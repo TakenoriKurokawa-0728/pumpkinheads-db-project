@@ -78,7 +78,9 @@ CREATE TABLE public.m_members (
 );
 
 -- 出典（Source）をインジェクション（注入）
-COMMENT ON COLUMN public.m_members.middle_name IS 'Source: Verified via Musixmatch (Writer ID) - Pending official confirmation';
+COMMENT ON COLUMN public.m_members.middle_name IS
+'Source: Verified via Musixmatch (Writer ID)
+ - Pending official confirmation';
 
 -- 高速検索のための索引（Index）をマウント
 CREATE INDEX idx_member_name_burrn ON public.m_members (name_burrn);
