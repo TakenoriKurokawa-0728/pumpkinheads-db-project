@@ -86,15 +86,15 @@ COMMENT ON COLUMN public.m_members.middle_name IS
 CREATE INDEX idx_member_name_burrn ON public.m_members (name_burrn);
 
 CREATE TABLE public.m_albums (
-    album_id              SERIAL PRIMARY KEY,    -- 唯一の親ID（10）
+    album_id              SERIAL PRIMARY KEY,    -- 唯一の親ID
     title                 VARCHAR(255) NOT NULL, -- 整合性の取れたタイトル
     release_year          INTEGER,
-    catalog_no            VARCHAR(100),
+    catalog_no            VARCHAR(100),          -- 現物品番（VICP等）
     total_sales_millions  NUMERIC(5, 2),
     chart_peak_germany    INTEGER,
-    producer              VARCHAR(255),          -- 修正で追加（10）
-    total_duration        VARCHAR(50),           -- 修正で追加（10）
-    verification_source   TEXT                   -- 1.8msで特定（10）
+    producer              VARCHAR(255),          -- 音の建築士
+    total_duration        INTERVAL,              -- 【重要】自動同期用の時間型
+    verification_source   TEXT                   -- 真実の出所
 );
 
 -- 楽曲データを新マスタにマウント（再定義）
