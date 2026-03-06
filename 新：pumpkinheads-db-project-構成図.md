@@ -85,6 +85,8 @@ COMMENT ON COLUMN public.m_members.middle_name IS
 -- 高速検索のための索引（Index）をマウント
 CREATE INDEX idx_member_name_burrn ON public.m_members (name_burrn);
 
+-------------------------------------------------------------------------------
+
 CREATE TABLE public.m_albums (
     album_id              SERIAL PRIMARY KEY,    -- 唯一の親ID
     title                 VARCHAR(255) NOT NULL, -- 整合性の取れたタイトル
@@ -97,21 +99,37 @@ CREATE TABLE public.m_albums (
     verification_source   TEXT                   -- 真実の出所
 );
 
+-- アルバム名で検索・ソートすることが多いため、タイトルに索引を貼る
+CREATE INDEX idx_album_title ON public.m_albums (title);
+-- 発売年順にディスコグラフィを表示するための索引
+CREATE INDEX idx_album_release_year ON public.m_albums (release_year DESC);
+
+-------------------------------------------------------------------------------
+
 -- 楽曲データを新マスタにマウント（再定義）
 CREATE TABLE public.m_tracks (
     track_id          SERIAL PRIMARY KEY,
     album_id          INTEGER REFERENCES public.m_albums(album_id) ON DELETE CASCADE,
-    title             VARCHAR(255),
-    duration          VARCHAR(50),
-    energy_level      INTEGER,
+    track_no          INTEGER NOT NULL,       -- 魂の並び順（必須）
+    title             VARCHAR(255) NOT NULL,  -- 魂のタイトル（必須）
+    duration          INTERVAL NOT NULL,      -- 【重要】精密な再生時間（13:37）
+    energy_level      INTEGER CHECK (energy_level BETWEEN 1 AND 10),
     lyric_anchor_url  TEXT,
-    youtube_url       TEXT,
-    track_no          INTEGER
+    youtube_url       TEXT
 );
+
+-- 加速装置：アルバムごとの曲を1.8msで射抜く索引
+CREATE INDEX idx_track_album_sync ON public.m_tracks (album_id);
 
 -- 作詞者と作曲者の列を物理的にインジェクション（注入）
 ALTER TABLE public.m_tracks ADD COLUMN lyricist VARCHAR(100);
 ALTER TABLE public.m_tracks ADD COLUMN composer VARCHAR(100);
+
+-- ファミリーネーム運用のための「定義の注釈（マウント）」
+COMMENT ON COLUMN public.m_tracks.lyricist IS 'Writer Family Name (e.g. Weikath, Hansen) - Verified by Credits';
+COMMENT ON COLUMN public.m_tracks.composer IS 'Composer Family Name (e.g. Weikath, Hansen) - Verified by Credits';
+
+-------------------------------------------------------------------------------
 
 -- 既存のライブ関連テーブルの不整合を排除するために物理削除
 DROP TABLE IF EXISTS public.t_setlists, public.m_live_shows CASCADE;
@@ -170,5 +188,33 @@ JOIN public.m_albums a ON t.album_id = a.album_id
 LEFT JOIN public.t_setlists s ON t.track_id = s.track_id
 GROUP BY t.track_id, t.title, a.title
 ORDER BY frequency_rate DESC;
+
+-------------------------------------------------------------------------------
+
+-- 1. 媒体マスタ（親）の再構築
+CREATE TABLE public.m_magazines (
+    magazine_id      SERIAL PRIMARY KEY,
+    name             VARCHAR(100) NOT NULL,
+    publisher        VARCHAR(100),
+    country          VARCHAR(50) DEFAULT 'Japan'
+);
+
+-- 2. 記事・レビュー内容（子）の再構築
+CREATE TABLE public.t_magazine_contents (
+    content_id       SERIAL PRIMARY KEY,
+    magazine_id      INT REFERENCES public.m_magazines(magazine_id) ON DELETE CASCADE,
+    member_id        INT REFERENCES public.m_members(member_id),
+    publish_date     DATE NOT NULL,
+    has_interview    BOOLEAN DEFAULT FALSE,
+    has_tab_score    BOOLEAN DEFAULT FALSE,
+    review_score     INT CHECK (review_score BETWEEN 0 AND 100),
+    summary_text     TEXT,
+    page_number      INT,
+    updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- インデックスとコメントのマウント
+CREATE INDEX idx_tab_sync ON public.t_magazine_contents (has_tab_score) WHERE has_tab_score = TRUE;
+COMMENT ON TABLE public.t_magazine_contents IS 'Archive of Magazine Interviews, Reviews, and Tablatures';
 
 ```
