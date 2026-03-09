@@ -96,6 +96,13 @@ ALTER TABLE public.m_members
 CREATE INDEX idx_member_name_burrn ON public.m_members (name_burrn);
 CREATE INDEX idx_members_is_active  ON public.m_members (is_active);
 
+-- 守護神マスタに「真実の原典（Wiki）」への神速ルーティングを確保
+ALTER TABLE public.m_members 
+    ADD COLUMN wiki_url VARCHAR(255); -- 降臨の軌跡：Wikipedia公式URL
+
+-- 出典（Source）の定義をインジェクション
+COMMENT ON COLUMN public.m_members.wiki_url IS 'Source: Official Wikipedia (En/Ja) - Root of Truth';
+
 --------------------------------------------------------------------------------
 -- 2. 名盤（Albums）セクタ
 --------------------------------------------------------------------------------
