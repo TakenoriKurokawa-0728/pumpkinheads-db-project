@@ -67,8 +67,7 @@ CREATE TABLE public.m_members (
     instrument       VARCHAR(50),           -- 担当楽器（1.8msでSync）
     birth_date       DATE,                  -- 降臨の刻
     height_cm        DECIMAL(5,2),          -- 数ミリ単位の物理真実（10）
-    blood_type       VARCHAR(5)             -- 内部を流れる旋律（A, B, AB, O）
-                     CHECK (blood_type IN ('A', 'B', 'AB', 'O')), 
+    blood_type       VARCHAR(5),            -- 内部を流れる旋律（A, B, AB, O）
     birth_place      VARCHAR(100),          -- 聖なる地
     nationality      VARCHAR(50),           -- 帰属する領域
     joined_year      INTEGER,               -- 叙任の年
@@ -84,14 +83,15 @@ COMMENT ON COLUMN public.m_members.middle_name IS
 'Source: Verified via Musixmatch (Writer ID)
  - Pending official confirmation';
 
--- データの整合性を死守するための物理防壁（Shield）を展開
+-- データの整合性を死守するための物理防壁（Shield）を一括展開
+-- 重複を排し、一分の隙もなく定義を固定する
 ALTER TABLE public.m_members 
     ADD CONSTRAINT chk_blood_type       CHECK (blood_type IN ('A', 'B', 'AB', 'O')), -- 内部旋律の規定（四型への収束）
     ADD CONSTRAINT chk_height_positive   CHECK (height_cm > 0);                      -- 物理真実の正当性（負値の排除：10）
 
 -- 高速検索のための索引（Index）をマウント
 CREATE INDEX idx_member_name_burrn ON public.m_members (name_burrn);
-CREATE INDEX idx_members_is_active  ON public.m_members(is_active);
+CREATE INDEX idx_members_is_active  ON public.m_members (is_active);
 
 -------------------------------------------------------------------------------
 
