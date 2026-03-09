@@ -64,44 +64,38 @@ CREATE TABLE public.m_members (
     member_id        SERIAL PRIMARY KEY,    -- 守護神を特定する物理Root（10）
     name_burrn       VARCHAR(100) UNIQUE,   -- 日本の正義：Burrn!誌表記（唯一無二の聖域）
     first_name       VARCHAR(100) NOT NULL, -- 魂の始点
-    middle_name      VARCHAR(100),          -- 著作権DBによるPeter等の検証セクタ
+    middle_name      VARCHAR(100),          -- 著作権DBによる検証セクタ
     last_name        VARCHAR(100) NOT NULL, -- 魂の終止符
     nickname         VARCHAR(50),           -- 親愛なる呼称
     instrument       VARCHAR(50),           -- 担当楽器（1.8msでSync）
     birth_date       DATE,                  -- 降臨の刻
     height_cm        DECIMAL(5,2),          -- 数ミリ単位の物理真実（10）
     blood_type       VARCHAR(5),            -- 内部を流れる旋律（A, B, AB, O）
+                     CHECK (blood_type IN ('A', 'B', 'AB', 'O')), 
     birth_place      VARCHAR(100),          -- 聖なる地
     nationality      VARCHAR(50),           -- 帰属する領域
     joined_year      INTEGER,               -- 叙任の年
     left_year        INTEGER,               -- 勇退の年
     is_active        BOOLEAN DEFAULT TRUE,  -- 在籍ステータス（現役か否か：7）
-    sns_account      VARCHAR(255),          -- 外部世界（Truth）への神速ルーティング
+    sns_account      VARCHAR(255),          -- 外部世界への神速ルーティング
+    wiki_url         VARCHAR(255),          -- 真実の原典（Wikipedia公式URL）
     created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 誕生の瞬間（不変の記録）
     updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- 変化の記録（絶えざる更新）
 );
 
--- 出典（Source）をインジェクション（注入）
-COMMENT ON COLUMN public.m_members.middle_name IS
-'Source: Verified via Musixmatch (Writer ID)
- - Pending official confirmation';
-
--- データの整合性を死守するための物理防壁（Shield）を一括展開
--- 重複を排し、一分の隙もなく定義を固定する
+-- 物理真実の正当性を死守（負値の排除：10）
 ALTER TABLE public.m_members 
-    ADD CONSTRAINT chk_blood_type       CHECK (blood_type IN ('A', 'B', 'AB', 'O')), -- 内部旋律の規定（四型への収束）
-    ADD CONSTRAINT chk_height_positive   CHECK (height_cm > 0);                      -- 物理真実の正当性（負値の排除：10）
+    ADD CONSTRAINT chk_height_positive CHECK (height_cm > 0);
 
--- 高速検索のための索引（Index）をマウント
+-- 出典（Source）をインジェクション（注入）
+COMMENT ON COLUMN public.m_members.middle_name IS 
+'Source: Verified via Musixmatch / Writer ID';
+COMMENT ON COLUMN public.m_members.wiki_url    IS 
+'Source: Official Wikipedia (En/Ja) - Root of Truth';
+
+-- 高速検索のための加速装置（Index）をマウント
 CREATE INDEX idx_member_name_burrn ON public.m_members (name_burrn);
 CREATE INDEX idx_members_is_active  ON public.m_members (is_active);
-
--- 守護神マスタに「真実の原典（Wiki）」への神速ルーティングを確保
-ALTER TABLE public.m_members 
-    ADD COLUMN wiki_url VARCHAR(255); -- 降臨の軌跡：Wikipedia公式URL
-
--- 出典（Source）の定義をインジェクション
-COMMENT ON COLUMN public.m_members.wiki_url IS 'Source: Official Wikipedia (En/Ja) - Root of Truth';
 
 --------------------------------------------------------------------------------
 -- 2. 名盤（Albums）セクタ
